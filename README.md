@@ -2,6 +2,26 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.0.
 
+# WebPack usage
+
+npm run package --buildName='BMO-creditalert' --buildNumber='99998888' 
+
+npm run package --buildName=Alerts-Console_${bamboo.repository.git.branch} --buildNumber=${bamboo.buildNumber}
+
+==========================================================================================
+Ejection was successful.
+
+To run your builds, you now need to do the following commands:
+   - "npm run build" to build.
+   - "npm run test" to run unit tests.
+   - "npm start" to serve the app using webpack-dev-server.
+   - "npm run e2e" to run protractor.
+
+Running the equivalent CLI commands will result in an error.
+
+==========================================================================================
+Some packages were added. Please run "npm install".
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
