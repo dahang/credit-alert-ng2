@@ -17,6 +17,9 @@ const baseHref = "";
 const deployUrl = "";
 const ZipPlugin = require('zip-webpack-plugin');
 
+const fs = require('fs');
+const mkdirp = require('mkdirp');
+const getDirName = require('path').dirname;
 
 const dateFormat =  (date, fstr, utc) => {
   utc = utc ? 'getUTC' : 'get';
@@ -34,6 +37,20 @@ const dateFormat =  (date, fstr, utc) => {
     return ('0' + m).slice (-2);
   });
 }
+const lastBuildPath = "dist/package/lastbuild.txt";
+const lastBuild = (buildName) => {
+  mkdirp(getDirName(lastBuildPath), function (err) {
+    if (err) return cb(err);
+    fs.writeFile(lastBuildPath, buildName, { flag: 'w+' }, function (err) {
+      if (err) {
+        return console.log(err);
+      }
+      console.log("The last build name is: ", buildName);
+    });
+
+  });
+}
+
 
 // process.argv.forEach(function (val, index, array) {
 //   console.log(index + ': ' + val);
@@ -76,7 +93,7 @@ module.exports = {
     ]
   },
   "output": {
-    "path": path.join(process.cwd(), "dist/package"),
+    "path": path.join(process.cwd(), "dist"),
     "filename": "[name].[chunkhash:20].bundle.js",
     "chunkFilename": "[id].[chunkhash:20].chunk.js"
   },
@@ -351,7 +368,7 @@ module.exports = {
     new ZipPlugin({
       // OPTIONAL: defaults to the Webpack output path (above)
       // can be relative (to Webpack output path) or absolute
-      path: 'zip',
+      path: 'package',
 
       // OPTIONAL: defaults to the Webpack output filename (above) or,
       // if not present, the basename of the path
@@ -360,6 +377,7 @@ module.exports = {
         
         let buildName=process.env.npm_config_buildName + "_" + dateFormat (new Date (), "%Y%m%d", true) + "." + process.env.npm_config_buildNumber + '.zip';
         // let buildName='gutil.env.buildName' + "_" + "." + 'gutil.env.buildNumber' + '.zip';
+        lastBuild(buildName);
         return buildName;
       })(),
 
